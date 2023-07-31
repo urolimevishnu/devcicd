@@ -3,46 +3,42 @@ name: Deploy to GKE
 on:
   push:
     branches:
-      - master
+      - master  # Adjust this branch name as per your requirement
 
-env:
-  PROJECT_ID: devproje1
-  CLUSTER_NAME: dev-task-cluster-dev
-  CLUSTER_ZONE: us-central1-c
-
-jobs: 
+jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-#    - name: Connect to GKE
-#      uses: google-github-actions/get-gke-credentials@v0.4.0
-#      with:
-#        cluster_name: ${{ env.CLUSTER_NAME }}
-#        location: ${{ env.CLUSTER_ZONE }}
-    - name: Deploy to GKE
-      uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.4.0
-      with:
-        version: 1
-        project_id: $PROJECT_ID
-        service_account_key: ${{ secrets.GCLOUD_AUTH }}
-    - name: Install Helm
-      run: |-
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.4.0
+        with:
+          version: 1.0.0
+          project_id: ${{ secrets.PROJECT_ID }}
+          service_account_key: ${{ secrets.GCLOUD_AUTH }}
+
+      # Authenticate with Google Cloud SDK
+      - name: Authenticate with Google Cloud SDK
+        run: gcloud auth activate-service-account --key-file=${{ secrets.GCLOUD_AUTH }}
+      # Configure kubectl
+      - name: Configure kubectl
+        run: gcloud container clusters get-credentials dev-task --zone us-central1-c --project ${{ secrets.PROJECT_ID }}
+      # Install Helm
+      - name: Install Helm
+        run: |
           curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
           chmod 700 get_helm.sh
           ./get_helm.sh
 
-    - name: Deploy Helm Chart
-      run: |
-          helm upgrade --install  dotnet-release webapp-helm-chart/ 
-    - name: Configure kubectl
-      run: |
-        gcloud config set project $PROJECT_ID
-        gcloud config set compute/zone $CLUSTER_ZONE
-        gcloud container clusters get-credentials $CLUSTER_NAME
-    - name: Apply Deployment
-      run: |
-        helm install wordpress-dev-1 wordpress
-        
-      
+      - name: Deploy Helm Chart
+        run: |
+          helm upgrade --install  wordpress-app wordpress
+
+
+
+
