@@ -42,7 +42,7 @@ jobs:
           ./get_helm.sh
           
           #gcloud components install gke-gcloud-auth-plugin         
-          apt-get install git google-cloud-sdk-gke-gcloud-auth-plugin -y
+          sudo apt-get install git google-cloud-sdk-gke-gcloud-auth-plugin -y
           # sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin -y
           
 
