@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: {{ .Values.wpNamespaceYaml.name }}
+  labels:
+    app: mysql
+spec:
+  replicas: {{ .Values.mysqlDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql-container
+          image: {{ .Values.mysqlDeployment.image }}
+          imagePullPolicy: {{ .Values.mysqlDeployment.imagePullPolicy }}      
+          ports:
+            - containerPort: 3306
+          resources:
+            limits:
+              memory: {{.Values.mysqlDeployment.memoryLimit }}
+              cpu: {{ .Values.mysqlDeployment.cpuLimit }}
+          volumeMounts:
+            - name: mysql-init
+              mountPath: /docker-entrypoint-initdb.d
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+          env:
+            - name: MYSQL_DATABASE
+              value: {{ .Values.mysqlDeployment.databaseName }}
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: wp-secrets
+                  key: MYSQL_ROOT_PASSWORD                 
+      volumes:
+        - name: mysql-init
+          configMap:
+            name: mysql-wp-config
+        - name: mysql-data    
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-wp-config
+  namespace: {{ .Values.wpNamespaceYaml.name }}
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS {{ .Values.wpNamespaceYaml.name }};
+
+

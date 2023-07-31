@@ -1,0 +1,54 @@
+# This is the value.yaml file for wordpress deployment created by vishnuprasad for a test project.
+# This file is created in yaml format.
+# Each yaml filein the template section has given the values from here as in order.
+# Repeated values are taken from the previous values for each file.
+#
+#
+# Value for 01-wp-namespace.yaml
+#
+wpNamespaceYaml:
+  name: "wordpress"
+
+# Value for 02--persistent-volumes.yaml
+#
+persistentVolumeMysql:
+  storageCapacity: "100Mi"
+persistentVolumeWordpress:
+  storageCapacity: "1Gi"
+
+# Value for 03-volume-claims.yaml
+#
+volumeClaimMysql:
+  requestStorage: "100Mi"
+volumeClaimWordpress:
+  requestStorage: "1Gi"
+
+# Value for 04-wp-sealed-secret.yaml
+# --------
+
+# Value for 05-mysql-depl.yaml
+#
+mysqlDeployment:
+  replicas: "1"
+  image: "mysql:8"
+  imagePullPolicy: "IfNotPresent"
+  memoryLimit: "1Gi"
+  cpuLimit: "1"
+  databaseName: "wordpress"
+
+# Value for 06-mysql.service.yaml
+# --------
+
+# Value for 07-wp-depl.yaml
+#
+wordpressDeployment:
+  replicas: "1"
+  image: "wordpress:6.1.1"
+  imagePullPolicy: "IfNotPresent"
+  memoryLimit: "1Gi"
+  cpuLimit: "1"
+
+# Value for 08-wp-service.yaml
+#
+wordpressService:
+  type: "LoadBalancer"
