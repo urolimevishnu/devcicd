@@ -11,8 +11,6 @@ jobs:
 
     steps:
       # Checkout the repository
-      #- name: Checkout Code
-      #  uses: actions/checkout@v3
       - uses: 'actions/checkout@v3'
 
       - id: 'auth'
@@ -20,41 +18,23 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCLOUD_AUTH }}'
-      # Set up Google Cloud SDK
-      #- name: Set up Google Cloud SDK
-      #  uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.4.0
-      #  with:
-      #    version: 1.0.0
-      #    project_id: ${{ secrets.PROJECT_ID }}
-      #    service_account_key: ${{ secrets.GCLOUD_AUTH }}
-
-      # Authenticate with Google Cloud SDK
-      #- name: Authenticate with Google Cloud SDK
-      #  run: gcloud auth activate-service-account --key-file=${{ secrets.GCLOUD_AUTH }}
+     
       # Configure kubectl
-      - name: Configure kubectl
+      - name: Connect to the GKE cluster
         run: gcloud container clusters get-credentials dev-task-cluster-dev --zone us-central1-c --project ${{ secrets.PROJECT_ID }}
         
-      # Install Helm
-      #- name: Install Helm
-      #  run: |
-      #    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-      #    chmod 700 get_helm.sh
-      #    ./get_helm.sh
-          
-          #gcloud components install gke-gcloud-auth-plugin         
-          #sudo apt-get install git google-cloud-sdk-gke-gcloud-auth-plugin -y
-          # sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin -y
-          
-
-      - name: Deploy Helm Chart
+      - name: Install kubectl and setup GKE AUTH PLUGIN
         run: |
           echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
           curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
           sudo apt update
           sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin kubectl -y
           export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+      - name: Check Kubectl command
+        run: |
           kubectl get svc
+      - name: Install helm chart
+        run: |
           helm upgrade --install  wordpress-app wordpress
 
 
