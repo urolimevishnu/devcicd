@@ -24,7 +24,7 @@ jobs:
 
       # Authenticate with Google Cloud SDK
       - name: Authenticate with Google Cloud SDK
-        run: gcloud auth activate-service-account --key-file=${{ secrets.GCLOUD_AUTH }}
+        run: gcloud auth activate-service-account --key-file= ${{ secrets.GCLOUD_AUTH }}
       # Configure kubectl
       - name: Configure kubectl
         run: gcloud container clusters get-credentials dev-task --zone us-central1-c --project ${{ secrets.PROJECT_ID }}
