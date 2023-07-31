@@ -1,1 +1,40 @@
-#
+name: Deploy to GKE
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  PROJECT_ID: devproje1
+  CLUSTER_NAME: dev-task-cluster-dev
+  ZONE: us-central1-c
+
+jobs: 
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to GKE
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: 1
+        project_id: $PROJECT_ID
+        service_account_key: ${{ secrets.GCLOUD_AUTH }}
+    - name: Install kubectl
+      run: |
+        sudo apt-get install kubectl -y
+    - name: Install helm
+      run: |
+        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+        chmod 700 get_helm.sh
+        ./get_helm.sh    
+    - name: Configure kubectl
+      run: |
+        gcloud config set project $PROJECT_ID
+        gcloud config set compute/zone $ZONE
+        gcloud container clusters get-credentials $CLUSTER_NAME
+    - name: Apply Deployment
+      run: |
+        helm install wordpress-dev-1 wordpress
+        
+      
