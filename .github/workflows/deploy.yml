@@ -11,9 +11,15 @@ jobs:
 
     steps:
       # Checkout the repository
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      #- name: Checkout Code
+      #  uses: actions/checkout@v3
+      - uses: 'actions/checkout@v3'
 
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCLOUD_AUTH }}'
       # Set up Google Cloud SDK
       #- name: Set up Google Cloud SDK
       #  uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.4.0
@@ -23,8 +29,8 @@ jobs:
       #    service_account_key: ${{ secrets.GCLOUD_AUTH }}
 
       # Authenticate with Google Cloud SDK
-      - name: Authenticate with Google Cloud SDK
-        run: gcloud auth activate-service-account --key-file=${{ secrets.GCLOUD_AUTH }}
+      #- name: Authenticate with Google Cloud SDK
+      #  run: gcloud auth activate-service-account --key-file=${{ secrets.GCLOUD_AUTH }}
       # Configure kubectl
       - name: Configure kubectl
         run: gcloud container clusters get-credentials dev-task --zone us-central1-c --project ${{ secrets.PROJECT_ID }}
