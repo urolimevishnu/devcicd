@@ -20,7 +20,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual-wp
+  storageClassName: standard
   capacity:
     storage: {{ .Values.persistentVolumeWordpress.storageCapacity }}
   accessModes:
