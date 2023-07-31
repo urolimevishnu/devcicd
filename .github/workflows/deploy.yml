@@ -34,7 +34,7 @@ jobs:
       # Configure kubectl
       - name: Configure kubectl
         run: gcloud container clusters get-credentials dev-task-cluster-dev --zone us-central1-c --project ${{ secrets.PROJECT_ID }}
-        run: kubectl get svc
+        
       # Install Helm
       #- name: Install Helm
       #  run: |
@@ -43,13 +43,14 @@ jobs:
       #    ./get_helm.sh
           
           #gcloud components install gke-gcloud-auth-plugin         
-          sudo apt-get install git google-cloud-sdk-gke-gcloud-auth-plugin -y
+          #sudo apt-get install git google-cloud-sdk-gke-gcloud-auth-plugin -y
           # sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin -y
           
 
       - name: Deploy Helm Chart
         run: |
-          helm upgrade --install  wordpress-app wordpress
+         run: kubectl get svc
+         helm upgrade --install  wordpress-app wordpress
 
 
 
