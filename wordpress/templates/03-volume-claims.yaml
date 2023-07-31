@@ -17,7 +17,7 @@ metadata:
   name: wordpress-pvc
   namespace: {{ .Values.wpNamespaceYaml.name }}
 spec:
-  storageClassName: manual
+  storageClassName: standard
   accessModes:
     - ReadWriteMany
   resources:
