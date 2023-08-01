@@ -32,7 +32,7 @@ spec:
             - name: WORDPRESS_DB_HOST
               value: mysql-service:3306
             - name: WORDPRESS_DB_PASSWORD
-              value: {{  .Values.secret.wpPassword }}
+              value: {{ .Values.secret.wpPassword }}
               #valueFrom:
               #  secretKeyRef:
               #    name: wp-secrets
