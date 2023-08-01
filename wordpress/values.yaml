@@ -26,8 +26,8 @@ volumeClaimWordpress:
 # Value for 04-wp-sealed-secret.yaml
 # 
 secret:
-  wpPassword: "${{ secrets.DB_PASSWORD }}"
-  wpUsername: "${{ secrets.DB_USERNAME }}"
+  wpPassword: ""
+  wpUsername: ""
 
 
 # Value for 05-mysql-depl.yaml
