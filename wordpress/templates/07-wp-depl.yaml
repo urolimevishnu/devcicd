@@ -38,7 +38,7 @@ spec:
               #    name: wp-secrets
               #    key: MYSQL_ROOT_PASSWORD
             - name: WORDPRESS_DB_USER
-              value: {{ .Values.secret.wpPassword }}
+              value: {{ .Values.secret.wpUsername }}
               #valueFrom:
               #  secretKeyRef:
               #    name: wp-secrets
