@@ -34,10 +34,11 @@ spec:
             - name: MYSQL_DATABASE
               value: {{ .Values.mysqlDeployment.databaseName }}
             - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: wp-secrets
-                  key: MYSQL_ROOT_PASSWORD                 
+              value: {{ .Values.secret.wpPassword }}
+              #valueFrom:
+              #  secretKeyRef:
+              #    name: wp-secrets
+              #    key: MYSQL_ROOT_PASSWORD                 
       volumes:
         - name: mysql-init
           configMap:
