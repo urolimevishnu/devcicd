@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  namespace: {{ .Values.wpNamespaceYaml.name }}
+  labels:
+    app: wordpress
+spec:
+  replicas: {{ .Values.wordpressDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+        - name: wordpress-container
+          image: {{ .Values.wordpressDeployment.image }}
+          imagePullPolicy: {{ .Values.wordpressDeployment.imagePullPolicy }}          
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: {{ .Values.wordpressDeployment.memoryLimit }}
+              cpu: {{ .Values.wordpressDeployment.cpuLimit }}
+          volumeMounts:
+            - name: wordpress-data
+              mountPath: /var/www/html/wp-content
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: mysql-service:3306
+            - name: WORDPRESS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: wp-secrets
+                  key: MYSQL_ROOT_PASSWORD
+            - name: WORDPRESS_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: wp-secrets
+                  key: WORDPRESS_DB_USER
+
+            - name: WORDPRESS_DB_NAME
+              value: {{ .Values.mysqlDeployment.databaseName }}       
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "-c", "chown -R www-data:www-data /var/www; chmod -R 774 /var/www"]                        
+      volumes:
+        - name: wordpress-data
+          persistentVolumeClaim:
+            claimName: wordpress-pvc
+
+
