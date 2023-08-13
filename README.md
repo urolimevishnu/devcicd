@@ -39,7 +39,8 @@ You will be asked to provide your project id, dev and prod cluster name, dev use
 
 ### Architecture Diagram
 
-![devtask1 drawio](https://github.com/urolimevishnu/devcicd/assets/124776856/a233407f-72e2-495b-9796-322d03018cc7)
+
+![Copy of devtask1 drawio](https://github.com/urolimevishnu/devcicd/assets/124776856/14997428-1a49-4a14-90d6-8a28434611d9)
 
 
 This stage consistes of creating two terraform files which will be used to create two GKE clusters. We are using the same terraform files we used earlier. Then we need to create a helm chart which we will use to create a wordpress application in the GKE clusters.
