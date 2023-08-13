@@ -5,7 +5,8 @@
 
 ### Architecture Diagram
 
-![POC1GHAP drawio](https://github.com/urolimevishnu/devcicd/assets/124776856/c02f7899-f491-469e-a36d-d4f602542c25)
+![Copy of devtask1 drawio (2)](https://github.com/urolimevishnu/devcicd/assets/124776856/5e376ed9-8623-494c-ae56-4b7b48f92322)
+
 
 This task consists of creating two kubernetes clusters for two environments as one for dev and other for prod using terraform on GCP. Then we need to create a sample application with database using helm chart. For that i have created a helm chart named wordpress which is provided in this repository along with the terraform files needed for the GKE cluster deployment.
 
